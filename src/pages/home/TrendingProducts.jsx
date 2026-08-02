@@ -13,7 +13,7 @@ const TrendingProducts = () => {
         minPrice: '',
         maxPrice: '',
         page: 1,
-        limit: 12 // trending এর জন্য বেশি করে আনুন, তারপর slice করে দেখান
+        limit: 12
     });
 
     if (isLoading) return <Loading />;
