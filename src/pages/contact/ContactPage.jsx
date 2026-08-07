@@ -17,7 +17,7 @@ const contactInfo = [
     {
         icon: 'ri-mail-fill',
         label: 'Email Us',
-        value: 'support@lebaba.com',
+        value: 'support@ShoppingMall.com',
         sub: 'We reply within 24 hours',
         accent: '#8b5cf6',
         bg: '#8b5cf615',
@@ -387,10 +387,10 @@ const ContactPage = () => {
 
                             <div className="grid grid-cols-2 gap-3">
                                 {[
-                                    { icon: 'ri-instagram-line', label: 'Instagram', handle: '@lebaba.style', color: '#e1306c' },
-                                    { icon: 'ri-facebook-circle-line', label: 'Facebook', handle: 'Lebaba Mall', color: '#1877f2' },
-                                    { icon: 'ri-twitter-x-line', label: 'Twitter / X', handle: '@lebaba', color: '#ffffff' },
-                                    { icon: 'ri-youtube-line', label: 'YouTube', handle: 'Lebaba TV', color: '#ff0000' },
+                                    { icon: 'ri-instagram-line', label: 'Instagram', handle: '@ShoppingMall.style', color: '#e1306c' },
+                                    { icon: 'ri-facebook-circle-line', label: 'Facebook', handle: 'ShoppingMall Mall', color: '#1877f2' },
+                                    { icon: 'ri-twitter-x-line', label: 'Twitter / X', handle: '@ShoppingMall', color: '#ffffff' },
+                                    { icon: 'ri-youtube-line', label: 'YouTube', handle: 'ShoppingMall TV', color: '#ff0000' },
                                 ].map((social, i) => (
                                     <a
                                         key={i}

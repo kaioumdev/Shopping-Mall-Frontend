@@ -67,7 +67,7 @@ const VideoIntro = ({ onComplete }) => {
                         className="text-6xl md:text-8xl font-black text-white tracking-widest"
                         style={{ fontFamily: '"Playfair Display", serif', animation: 'slideUp 0.8s ease forwards' }}
                     >
-                        LEBABA
+                        ShoppingMall
                     </h1>
                 </div>
 

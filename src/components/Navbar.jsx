@@ -77,7 +77,7 @@ const Navbar = () => {
                         className="text-2xl font-black text-white hover:text-[#ed3849] transition-colors duration-300 tracking-tight"
                         style={{ fontFamily: '"Playfair Display", serif' }}
                     >
-                        Lebaba<span className="text-[#ed3849]">.</span>
+                        ShoppingMall<span className="text-[#ed3849]">.</span>
                     </Link>
 
                     {/* Desktop nav links */}

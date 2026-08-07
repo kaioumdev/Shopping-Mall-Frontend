@@ -6,7 +6,7 @@ const slides = [
     {
         tag: "New Season 2026",
         heading: "Discover\nYour Style",
-        sub: "Explore premium fashion across 100+ brands at Lebaba Shopping Mall.",
+        sub: "Explore premium fashion across 100+ brands at ShoppingMall Shopping Mall.",
         cta: "Shop Now",
         ctaPath: "/shop",
         accent: "#ed3849",

@@ -34,7 +34,7 @@ const Features = () => {
                 {/* Top divider */}
                 <div className="flex items-center gap-4 mb-12">
                     <div className="flex-1 h-px bg-white/5" />
-                    <span className="text-white/20 text-xs tracking-widest uppercase px-4">Why Choose Lebaba</span>
+                    <span className="text-white/20 text-xs tracking-widest uppercase px-4">Why Choose ShoppingMall</span>
                     <div className="flex-1 h-px bg-white/5" />
                 </div>
 

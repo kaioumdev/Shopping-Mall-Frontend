@@ -35,7 +35,7 @@ const UserDashboard = () => {
             <div className='px-6 pt-6 pb-4 border-b border-white/5'>
                 <Link to='/'>
                     <span className='text-2xl font-black text-white' style={{ fontFamily: '"Playfair Display", serif' }}>
-                        Lebaba<span className='text-[#ed3849]'>.</span>
+                        ShoppingMall<span className='text-[#ed3849]'>.</span>
                     </span>
                 </Link>
                 <div className='mt-2'>

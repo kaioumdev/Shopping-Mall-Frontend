@@ -15,7 +15,7 @@ const Footer = () => {
                 {/* Brand column */}
                 <div>
                     <h2 className="text-2xl font-black text-white mb-3 tracking-tight" style={{ fontFamily: '"Playfair Display", serif' }}>
-                        Lebaba<span className="text-[#ed3849]">.</span>
+                        ShoppingMall<span className="text-[#ed3849]">.</span>
                     </h2>
                     <p className="text-white/35 text-sm leading-relaxed mb-5">
                         Your ultimate shopping destination. Four floors of curated fashion, jewellery, beauty, and more.
@@ -99,14 +99,14 @@ const Footer = () => {
                         </span>
                         <span className="flex items-center gap-2">
                             <i className="ri-mail-fill text-[#ed3849]" />
-                            support@Lebaba.com
+                            support@ShoppingMall.com
                         </span>
                         <span className="flex items-center gap-2">
                             <i className="ri-phone-fill text-[#ed3849]" />
                             (+012) 3456 789
                         </span>
                     </div>
-                    <p>© 2025 Lebaba Shopping Mall. All rights reserved.</p>
+                    <p>© 2025 ShoppingMall Shopping Mall. All rights reserved.</p>
                 </div>
             </div>
         </footer>

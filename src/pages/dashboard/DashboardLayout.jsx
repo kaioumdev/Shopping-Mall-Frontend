@@ -64,7 +64,7 @@ const DashboardLayout = () => {
                         <i className='ri-menu-3-line text-xl' />
                     </button>
                     <span className='text-white font-bold text-lg' style={{ fontFamily: '"Playfair Display", serif' }}>
-                        Lebaba<span className='text-[#ed3849]'>.</span>
+                        ShoppingMall<span className='text-[#ed3849]'>.</span>
                     </span>
                 </div>
 
