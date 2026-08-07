@@ -1,71 +1,95 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
+
+const posts = [
+    {
+        tag: 'Timeless Elegance',
+        title: 'Mastering the Art of Capsule Wardrobes',
+        date: '12th August 2022',
+        img: 'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=800&auto=format&fit=crop',
+        readTime: '4 min read',
+    },
+    {
+        tag: 'Summer Breeze',
+        title: 'Unveiling the Hottest Beachwear Trends',
+        date: '18th January 2023',
+        img: 'https://images.unsplash.com/photo-1700159017572-de76bb0c5719?q=80&w=800&auto=format&fit=crop',
+        readTime: '3 min read',
+    },
+    {
+        tag: 'Power Dressing',
+        title: "Navigating the World of Women's Tailoring",
+        date: '5th January 2025',
+        img: 'https://plus.unsplash.com/premium_photo-1682142715511-27bfbfdc044f?q=80&w=800&auto=format&fit=crop',
+        readTime: '5 min read',
+    },
+    {
+        tag: 'New York Times',
+        title: "The World's Best Fashion Fair 2025",
+        date: '25th May 2025',
+        img: 'https://plus.unsplash.com/premium_photo-1713720663924-4e3fe8f20f79?q=80&w=800&auto=format&fit=crop',
+        readTime: '6 min read',
+    },
+]
 
 const Blogs = () => {
-  return (
-    <section className="section__container blog__container">
-        <h2 className="section__header">Latest From Blog</h2>
-        <p className="section__subheader">
-          Elevate your wardrobe with our freshest style tips, trends, and
-          inspiration on our blog.
-        </p>
-        <div
-          className="md:p-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8"
-        >
-          <div
-            className="blog__card cursor-pointer hover:scale-105 transition-all duration-200"
-          >
-            <img
-              src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&amp;w=2070&amp;auto=format&amp;fit=crop&amp;ixlib=rb-4.0.3&amp;ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-              alt="Mastering the Art of Capsule Wardrobes"
-            />
-            <div className="blog__card__content">
-              <h6>Timeless Elegance</h6>
-              <h4>Mastering the Art of Capsule Wardrobes</h4>
-              <p>12th August 2022</p>
+    return (
+        <section className="py-20 bg-[#111111]">
+            <div className="max-w-7xl mx-auto px-4">
+                {/* Header */}
+                <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
+                    <div>
+                        <span className="text-xs tracking-[0.3em] uppercase text-[#ed3849] font-semibold">Style Journal</span>
+                        <h2 className="text-4xl md:text-5xl font-black text-white mt-2" style={{ fontFamily: '"Playfair Display", serif' }}>
+                            Latest from Blog
+                        </h2>
+                    </div>
+                    <Link to="#" className="inline-flex items-center gap-2 text-white/50 hover:text-white text-sm font-medium transition-colors duration-300 group">
+                        All Articles
+                        <i className="ri-arrow-right-line group-hover:translate-x-1 transition-transform duration-300" />
+                    </Link>
+                </div>
+
+                {/* Grid */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                    {posts.map((post, i) => (
+                        <article
+                            key={i}
+                            className="group bg-white/3 rounded-2xl overflow-hidden border border-white/5 hover:border-white/15 transition-all duration-300 hover:-translate-y-1 cursor-pointer"
+                            style={{ background: 'rgba(255,255,255,0.02)' }}
+                        >
+                            {/* Image */}
+                            <div className="relative overflow-hidden h-48">
+                                <img
+                                    src={post.img}
+                                    alt={post.title}
+                                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 brightness-75 group-hover:brightness-90"
+                                />
+                                <div className="absolute top-3 left-3 bg-black/50 backdrop-blur-sm text-[#ed3849] text-xs font-semibold px-2.5 py-1 rounded-full border border-[#ed3849]/30">
+                                    {post.tag}
+                                </div>
+                            </div>
+
+                            {/* Content */}
+                            <div className="p-5">
+                                <h3 className="text-white font-semibold text-base leading-snug mb-3 line-clamp-2 group-hover:text-[#ed3849] transition-colors duration-300"
+                                    style={{ fontFamily: '"Playfair Display", serif' }}>
+                                    {post.title}
+                                </h3>
+                                <div className="flex items-center justify-between text-white/25 text-xs">
+                                    <span>{post.date}</span>
+                                    <span className="flex items-center gap-1">
+                                        <i className="ri-time-line" />
+                                        {post.readTime}
+                                    </span>
+                                </div>
+                            </div>
+                        </article>
+                    ))}
+                </div>
             </div>
-          </div>
-          <div
-            className="blog__card cursor-pointer hover:scale-105 transition-all duration-200"
-          >
-            <img
-              src="https://images.unsplash.com/photo-1700159017572-de76bb0c5719?q=80&amp;w=2072&amp;auto=format&amp;fit=crop&amp;ixlib=rb-4.0.3&amp;ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-              alt="Unveiling the Hottest Beachwear Trends"
-            />
-            <div className="blog__card__content">
-              <h6>Summer Breeze</h6>
-              <h4>Unveiling the Hottest Beachwear Trends</h4>
-              <p>18th January 2023</p>
-            </div>
-          </div>
-          <div
-            className="blog__card cursor-pointer hover:scale-105 transition-all duration-200"
-          >
-            <img
-              src="https://plus.unsplash.com/premium_photo-1682142715511-27bfbfdc044f?q=80&amp;w=2069&amp;auto=format&amp;fit=crop&amp;ixlib=rb-4.0.3&amp;ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-              alt="Navigating the World of Women's Tailoring"
-            />
-            <div className="blog__card__content">
-              <h6>Power Dressing</h6>
-              <h4>Navigating the World of Women's Tailoring</h4>
-              <p>5th January 2025</p>
-            </div>
-          </div>
-          <div
-            className="blog__card cursor-pointer hover:scale-105 transition-all duration-200"
-          >
-            <img
-              src="https://plus.unsplash.com/premium_photo-1713720663924-4e3fe8f20f79?q=80&amp;w=1948&amp;auto=format&amp;fit=crop&amp;ixlib=rb-4.0.3&amp;ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-              alt="The World's Best Fashion Fair 2025"
-            />
-            <div className="blog__card__content">
-              <h6>New York Times</h6>
-              <h4>The World's Best Fashion Fair 2025</h4>
-              <p>25th May 2025</p>
-            </div>
-          </div>
-        </div>
-      </section>
-  )
+        </section>
+    )
 }
 
 export default Blogs

@@ -1,13 +1,16 @@
 import React from 'react'
 
-const RatingStars = ({rating}) => {
-    const stars = [];
-    for(let i = 1; i <= 5; i++) {
-        stars.push( <span key={i} className={`ri-star${ i <= rating ? '-fill' : '-line'}`}></span>)
-    }
-  return (
-    <div className="product__rating">{stars}</div>
-  )
+const RatingStars = ({ rating }) => {
+    return (
+        <div className="flex items-center gap-0.5">
+            {[1, 2, 3, 4, 5].map((i) => (
+                <i
+                    key={i}
+                    className={`text-sm ${i <= rating ? 'ri-star-fill text-amber-400' : 'ri-star-line text-white/15'}`}
+                />
+            ))}
+        </div>
+    )
 }
 
 export default RatingStars

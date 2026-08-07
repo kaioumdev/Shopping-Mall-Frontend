@@ -9,8 +9,8 @@ function App() {
   return (
     <>
       <Navbar/>
-      <main className='min-h-screen'>
-      <Outlet/>
+      <main className='min-h-screen bg-[#0d0d0d]'>
+        <Outlet/>
       </main>
       <Footer/>
     </>

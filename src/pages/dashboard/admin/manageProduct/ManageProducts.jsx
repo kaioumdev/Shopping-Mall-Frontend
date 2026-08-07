@@ -1,186 +1,152 @@
 import React, { useState } from 'react'
-import {useDeleteProductMutation, useFetchAllProdutsQuery } from '../../../../redux/features/products/productsApi';
-import Loading from '../../../../components/Loading';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom'
+import { useDeleteProductMutation, useFetchAllProdutsQuery } from '../../../../redux/features/products/productsApi'
+import Loading from '../../../../components/Loading'
 
 const ManageProducts = () => {
-    const [currentPage, setCurrentPage] = useState(1);
-    const [productsPerPage] = useState(12);
-
+    const [currentPage, setCurrentPage] = useState(1)
+    const [productsPerPage] = useState(12)
     const [deleteProduct] = useDeleteProductMutation()
 
-    const {data: productsData = {}, error, isLoading, refetch} = useFetchAllProdutsQuery({
-        category : '',
-        color : '',
-        minPrice:'' ,
-        maxPrice:'',
-        page: currentPage,
-        limit: productsPerPage
-      });
+    const { data: productsData = {}, error, isLoading, refetch } = useFetchAllProdutsQuery({
+        category: '', color: '', minPrice: '', maxPrice: '',
+        page: currentPage, limit: productsPerPage,
+    })
 
-      if(isLoading) return <Loading/>
+    if (isLoading) return <Loading />
 
-      const {products, totalProducts, totalPages} = productsData?.data  || {};
+    const { products = [], totalProducts = 0, totalPages = 1 } = productsData?.data || {}
 
-    const handleDelete =  async (id) => {
+    const handleDelete = async (id) => {
+        if (!window.confirm('Delete this product?')) return
         try {
-            const response = await deleteProduct(id).unwrap();
-            alert("Product deleted successfully!");
+            await deleteProduct(id).unwrap()
+            alert('Product deleted successfully!')
             await refetch()
-        } catch (error) {
-            console.error("Failed to delete the product post:", error);
+        } catch (err) {
+            console.error('Failed to delete product:', err)
         }
     }
 
-    const startProduct = (currentPage - 1) * productsPerPage + 1;
-    const endProduct = startProduct + products.length - 1;
+    const startProduct = (currentPage - 1) * productsPerPage + 1
+    const endProduct = Math.min(startProduct + products.length - 1, totalProducts)
 
-    const handlePageChange = (pageNumber) => {
-        if(pageNumber > 0 && pageNumber <= totalPages) {
-          setCurrentPage(pageNumber)
-        }
-      }
+    const handlePageChange = (page) => {
+        if (page > 0 && page <= totalPages) setCurrentPage(page)
+    }
 
-  return (
-    <>
-    <section className="py-1 bg-blueGray-50">
-        <div className="w-full mb-12 xl:mb-0 px-4 mx-auto">
-            <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded ">
-                <div className="rounded-t mb-0 px-4 py-3 border-0">
-                    <div className="flex flex-wrap items-center">
-                        <div className="relative w-full px-4 max-w-full flex-grow flex-1">
-                            <h3 className="font-semibold text-base text-blueGray-700">
-                                All Products
-                            </h3>
-                        </div>
-                        <div className="relative w-full px-4 max-w-full flex-grow flex-1 text-right">
-                            <Link to="/shop">
-                                <button
-                                    className="bg-indigo-500 text-white active:bg-indigo-600 text-xs font-bold uppercase px-3 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                                    type="button"
-                                >
-                                    See all
-                                </button>
-                            </Link>
-                        </div>
-                    </div>
-                    <h3 className='text-sm my-4'>Showing {startProduct} to {endProduct} of {totalProducts} products</h3>
+    return (
+        <div>
+            {/* Header */}
+            <div className='flex items-center justify-between mb-8'>
+                <div>
+                    <p className='text-white/30 text-xs tracking-widest uppercase mb-1'>Admin</p>
+                    <h1 className='text-3xl font-black text-white' style={{ fontFamily: '"Playfair Display", serif' }}>
+                        Manage Products
+                    </h1>
+                    <p className='text-white/30 text-xs mt-1'>
+                        Showing {startProduct}–{endProduct} of {totalProducts} products
+                    </p>
                 </div>
+                <Link to='/dashboard/add-product'
+                    className='flex items-center gap-2 px-4 py-2.5 bg-[#ed3849] hover:bg-[#d23141] text-white text-sm font-semibold rounded-xl transition-all duration-200'>
+                    <i className='ri-add-line' /> Add Product
+                </Link>
+            </div>
 
-                <div className="block w-full overflow-x-auto">
-                    <table className="items-center bg-transparent w-full border-collapse ">
+            {/* Table */}
+            <div className='rounded-2xl border border-white/5 overflow-hidden' style={{ background: 'rgba(255,255,255,0.02)' }}>
+                <div className='overflow-x-auto'>
+                    <table className='w-full'>
                         <thead>
-                            <tr>
-                                <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
-                                    No.
-                                </th>
-                                <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
-                                    Product name
-                                </th>
-                                <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
-                                    Publishing date
-                                </th>
-                                <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
-                                    Edit or manage
-                                </th>
-                                <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
-                                    Delete
-                                </th>
+                            <tr className='border-b border-white/5' style={{ background: 'rgba(255,255,255,0.03)' }}>
+                                {['#', 'Product', 'Category', 'Price', 'Added', 'Actions'].map(h => (
+                                    <th key={h} className='text-left px-5 py-3.5 text-white/40 text-xs font-semibold tracking-wider uppercase whitespace-nowrap'>
+                                        {h}
+                                    </th>
+                                ))}
                             </tr>
                         </thead>
-
                         <tbody>
-                            {
-                                products && products.map((product, index) => (
-                                    <tr key={index}>
-
-                                        <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left text-blueGray-700 ">
-                                            {index + 1}
-                                        </th>
-                                        <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left text-blueGray-700 cursor-pointer hover:text-primary">
-                                            <Link to={`/shop/${product?._id}`}>{product?.name}</Link>
-                                        </th>
-
-                                        <td className="border-t-0 px-6 align-center border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                                            {new Date(product?.createdAt).toLocaleDateString()}
-                                        </td>
-                                        <td className="border-t-0 px-6 align-center border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                                            <Link to={`/dashboard/update-product/${product?._id}`} className="hover:text-blue-700">
-                                                <span className="flex gap-1 items-center justify-center">
-                                                    Edit</span>
+                            {products.length === 0 ? (
+                                <tr>
+                                    <td colSpan={6} className='text-center py-16 text-white/25'>
+                                        <i className='ri-box-3-line text-4xl block mb-2' />
+                                        No products found
+                                    </td>
+                                </tr>
+                            ) : products.map((product, index) => (
+                                <tr key={product._id}
+                                    className='border-b border-white/5 hover:bg-white/2 transition-colors last:border-b-0'>
+                                    <td className='px-5 py-4 text-white/40 text-sm'>{(currentPage - 1) * productsPerPage + index + 1}</td>
+                                    <td className='px-5 py-4'>
+                                        <div className='flex items-center gap-3'>
+                                            <div className='w-10 h-10 rounded-xl overflow-hidden bg-white/5 flex-shrink-0'>
+                                                {product?.image && (
+                                                    <img src={product.image} alt={product.name} className='w-full h-full object-cover' />
+                                                )}
+                                            </div>
+                                            <Link to={`/shop/${product?._id}`}
+                                                className='text-white/70 hover:text-[#ed3849] text-sm font-medium transition-colors max-w-[160px] truncate block'>
+                                                {product?.name}
                                             </Link>
-                                        </td>
-                                        <td className="border-t-0  px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                                            <button className="bg-red-600 text-white px-2 py-1"
-                                              onClick={() => handleDelete(product?._id)}
-                                            >Delete</button>
-                                        </td>
-                                    </tr>
-                                ))
-                            }
+                                        </div>
+                                    </td>
+                                    <td className='px-5 py-4'>
+                                        <span className='text-xs capitalize px-2.5 py-0.5 rounded-full border'
+                                            style={{ background: 'rgba(237,56,73,0.08)', color: '#ed3849', borderColor: 'rgba(237,56,73,0.15)' }}>
+                                            {product?.category}
+                                        </span>
+                                    </td>
+                                    <td className='px-5 py-4 text-white font-semibold text-sm'>${product?.price}</td>
+                                    <td className='px-5 py-4 text-white/40 text-sm whitespace-nowrap'>
+                                        {new Date(product?.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                                    </td>
+                                    <td className='px-5 py-4'>
+                                        <div className='flex items-center gap-2'>
+                                            <Link to={`/dashboard/update-product/${product?._id}`}
+                                                className='w-8 h-8 rounded-lg flex items-center justify-center text-blue-400 hover:bg-blue-500/10 border border-blue-500/20 transition-all duration-200'
+                                                title='Edit product'>
+                                                <i className='ri-edit-line text-sm' />
+                                            </Link>
+                                            <button onClick={() => handleDelete(product?._id)}
+                                                className='w-8 h-8 rounded-lg flex items-center justify-center text-[#ed3849] hover:bg-[#ed3849]/10 border border-[#ed3849]/20 transition-all duration-200'
+                                                title='Delete product'>
+                                                <i className='ri-delete-bin-7-line text-sm' />
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            ))}
                         </tbody>
                     </table>
                 </div>
             </div>
-        </div>
 
-        {/* Pagination controls */}
-        <div className="mt-6 flex justify-center">
-            <button
-                onClick={() => handlePageChange(currentPage - 1)}
-                disabled={currentPage === 1}
-                className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md mr-2"
-            >
-                Previous
-            </button>
-            {[...Array(totalPages)].map((_, index) => (
-                <button
-                    key={index}
-                    onClick={() => handlePageChange(index + 1)}
-                    className={`px-4 py-2 ${currentPage === index + 1 ? 'bg-blue-500 text-white' : 'bg-gray-300 text-gray-700'} rounded-md mx-1`}
-                >
-                    {index + 1}
-                </button>
-            ))}
-            <button
-                onClick={() => handlePageChange(currentPage + 1)}
-                disabled={currentPage === totalPages}
-                className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md ml-2"
-            >
-                Next
-            </button>
-        </div>
-        <footer className="relative pt-8 pb-6 mt-16">
-            <div className="container mx-auto px-4">
-                <div className="flex flex-wrap items-center md:justify-between justify-center">
-                    <div className="w-full md:w-6/12 px-4 mx-auto text-center">
-                        <div className="text-sm text-blueGray-500 font-semibold py-1">
-                            Made with{" "}
-                            <a
-                                href="https://www.creative-tim.com/product/notus-js"
-                                className="text-blueGray-500 hover:text-gray-800"
-                                target="_blank"
-                            >
-                                Notus JS
-                            </a>{" "}
-                            by{" "}
-                            <a
-                                href="https://www.creative-tim.com"
-                                className="text-blueGray-500 hover:text-blueGray-800"
-                                target="_blank"
-                            >
-                                {" "}
-                                Md Al Mamun
-                            </a>
-                            .
-                        </div>
-                    </div>
+            {/* Pagination */}
+            {totalPages > 1 && (
+                <div className='flex items-center justify-center gap-2 mt-8'>
+                    <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}
+                        className='w-9 h-9 rounded-xl border border-white/10 text-white/50 hover:text-white hover:border-white/25 disabled:opacity-25 disabled:cursor-not-allowed flex items-center justify-center transition-all duration-200'>
+                        <i className='ri-arrow-left-s-line' />
+                    </button>
+                    {[...Array(totalPages)].map((_, i) => (
+                        <button key={i} onClick={() => handlePageChange(i + 1)}
+                            className={`w-9 h-9 rounded-xl text-sm font-semibold transition-all duration-200 ${currentPage === i + 1
+                                ? 'bg-[#ed3849] text-white shadow-lg shadow-[#ed3849]/25'
+                                : 'border border-white/10 text-white/50 hover:text-white hover:border-white/25'
+                            }`}>
+                            {i + 1}
+                        </button>
+                    ))}
+                    <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}
+                        className='w-9 h-9 rounded-xl border border-white/10 text-white/50 hover:text-white hover:border-white/25 disabled:opacity-25 disabled:cursor-not-allowed flex items-center justify-center transition-all duration-200'>
+                        <i className='ri-arrow-right-s-line' />
+                    </button>
                 </div>
-            </div>
-        </footer>
-    </section>
-</>
-  )
+            )}
+        </div>
+    )
 }
 
 export default ManageProducts

@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { useEditProfileMutation } from '../../../../redux/features/auth/authApi'
+import { setUser } from '../../../../redux/features/auth/authSlice'
+import avatarImg from '../../../../assets/avatar.png'
 
-import avatarImg from "../../../../assets/avatar.png"
-import { useDispatch, useSelector } from 'react-redux';
-import { useEditProfileMutation } from '../../../../redux/features/auth/authApi';
-import { setUser } from '../../../../redux/features/auth/authSlice';
-
+const inputCls = 'w-full px-4 py-3 rounded-xl text-white text-sm placeholder-white/20 focus:outline-none transition-all duration-200 border focus:border-[#ed3849]/50'
+const inputStyle = { background: 'rgba(255,255,255,0.05)', borderColor: 'rgba(255,255,255,0.1)' }
 
 const UserProfile = () => {
-    const { user } = useSelector(state => state.auth);
-
+    const { user } = useSelector(state => state.auth)
     const dispatch = useDispatch()
+    const [isModalOpen, setIsModalOpen] = useState(false)
 
-    const [isModalOpen, setIsModalOpen] = useState(false);
     const [formData, setFormData] = useState({
         username: '',
         profileImage: '',
@@ -32,124 +32,136 @@ const UserProfile = () => {
         }
     }, [user])
 
-    const handleChange = (e) => {
-        setFormData({
-            ...formData,
-            [e.target.name]: e.target.value
+    const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value })
 
-        })
-    }
-
-    const [editProfile, {isLoading, isError, error}] = useEditProfileMutation()
+    const [editProfile, { isLoading }] = useEditProfileMutation()
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
-
-        const updatedUser =  {
-            username: formData.username, 
-            profileImage: formData.profileImage, 
-            bio: formData.bio, 
-            profession: formData.profession,
-            userId: formData.userId
-        }
-
+        e.preventDefault()
         try {
-            const response = await editProfile({id: user?._id, profileData: updatedUser}).unwrap();
-            // console.log(response.data);
+            const response = await editProfile({
+                id: user?._id,
+                profileData: {
+                    username: formData.username,
+                    profileImage: formData.profileImage,
+                    bio: formData.bio,
+                    profession: formData.profession,
+                    userId: formData.userId
+                }
+            }).unwrap()
             dispatch(setUser(response.data))
-            alert("Profile Update Successfully")
-        
-        } catch (error) {
-            alert('Failed to update profile. Please try again.');
+            alert('Profile updated successfully')
+            setIsModalOpen(false)
+        } catch {
+            alert('Failed to update profile. Please try again.')
         }
-
     }
+
     return (
-        <div className='container mx-auto p-6'>
-            <div>
-                <div className='flex items-center mb-4'>
-                    <img src={formData.profileImage || avatarImg} alt="" className="w-32 h-32 object-cover rounded-full ring" />
-                    <div className='ml-6 space-y-1'>
-                        <h2 className='text-2xl font-bold'>Username: {formData.username || "N/A"} </h2>
-                        <p className="text-gray-700">User Bio: {formData?.bio || "N/A"} </p>
-                        <p className="text-gray-700">Profession:  {formData.profession || "N/A"}</p>
+        <div>
+            {/* Page header */}
+            <div className='mb-8'>
+                <p className='text-white/30 text-xs tracking-widest uppercase mb-1'>Account</p>
+                <h1 className='text-3xl font-black text-white' style={{ fontFamily: '"Playfair Display", serif' }}>
+                    My Profile
+                </h1>
+            </div>
+
+            {/* Profile card */}
+            <div className='rounded-2xl border border-white/5 p-6 md:p-8' style={{ background: 'rgba(255,255,255,0.02)' }}>
+                <div className='flex flex-col sm:flex-row items-start sm:items-center gap-6'>
+                    {/* Avatar */}
+                    <div className='relative flex-shrink-0'>
+                        <img
+                            src={formData.profileImage || avatarImg}
+                            alt='Profile'
+                            className='w-24 h-24 rounded-2xl object-cover border-2 border-white/10'
+                        />
                     </div>
+
+                    {/* Info */}
+                    <div className='flex-1 min-w-0'>
+                        <h2 className='text-white text-xl font-bold mb-1'>{formData.username || 'No username set'}</h2>
+                        <p className='text-white/40 text-sm mb-1'>{formData.profession || 'No profession set'}</p>
+                        <p className='text-white/30 text-sm'>{formData.bio || 'No bio written yet'}</p>
+                    </div>
+
+                    {/* Edit button */}
                     <button
                         onClick={() => setIsModalOpen(true)}
-                        className='ml-auto text-blue-500 hover:text-blue-700'>
-                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 3H4a1 1 0 00-1 1v14a1 1 0 001 1h7m2 0h7a1 1 0 001-1V4a1 1 0 00-1-1h-7m-2 0v14"></path>
-                        </svg>
+                        className='flex items-center gap-2 px-5 py-2.5 rounded-xl border border-white/10 text-white/60 hover:text-white hover:border-white/25 text-sm font-medium transition-all duration-200 flex-shrink-0'>
+                        <i className='ri-edit-line' />
+                        Edit Profile
                     </button>
                 </div>
 
+                {/* Meta row */}
+                <div className='grid grid-cols-1 sm:grid-cols-3 gap-3 mt-8 pt-6 border-t border-white/5'>
+                    {[
+                        { label: 'Email', value: user?.email, icon: 'ri-mail-line' },
+                        { label: 'Role', value: user?.role, icon: 'ri-shield-user-line' },
+                        { label: 'Member Since', value: user?.createdAt ? new Date(user.createdAt).toLocaleDateString('en-US', { month: 'short', year: 'numeric' }) : 'N/A', icon: 'ri-calendar-line' },
+                    ].map(({ label, value, icon }) => (
+                        <div key={label} className='flex items-center gap-3 p-3 rounded-xl' style={{ background: 'rgba(255,255,255,0.03)' }}>
+                            <i className={`${icon} text-[#ed3849] text-lg`} />
+                            <div>
+                                <p className='text-white/30 text-xs'>{label}</p>
+                                <p className='text-white text-sm font-medium capitalize'>{value || 'N/A'}</p>
+                            </div>
+                        </div>
+                    ))}
+                </div>
             </div>
 
-            {
-                isModalOpen && (
-                    <div className='fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50'>
-
-                        <div className='bg-white p-6 rounded-lg md:w-96 max-w-xl mx-auto relative'>
-                            <button
-                                className='absolute top-2 right-2 text-gray-500 hover:text-gray-700'
-                                onClick={() => setIsModalOpen(false)}><svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
-                                </svg></button>
-
-                            <h2 className='text-2xl font-semibold mb-4'>Edit Profile</h2>
-
-                            {/* forms to collect data */}
-
-                            <form onSubmit={handleSubmit}>
-                                <div className='mb-4'>
-                                    <label htmlFor="username" className='block text-sm font-medium text-gray-700'>Username</label>
-
-                                    <input type="text" name="username" id="username"
-                                        value={formData.username}
-                                        onChange={handleChange}
-                                        className='mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm'
-                                        required
-                                    />
-                                </div>
-                                <div className='mb-4'>
-                                    <label htmlFor="profileImage" className='block text-sm font-medium text-gray-700'>Profile Image URL</label>
-
-                                    <input type="text" name="profileImage" id="profileImage"
-                                        value={formData.profileImage}
-                                        onChange={handleChange}
-                                        className='mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm'
-                                        required
-                                    />
-                                </div>
-                                <div className='mb-4'>
-                                    <label htmlFor="bio" className='block text-sm font-medium text-gray-700'>Write Bio</label>
-
-                                    <textarea type="text" name="bio" id="bio"
-                                        value={formData.bio}
-                                        rows="3"
-                                        onChange={handleChange}
-                                        className='mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm'
-                                        required
-                                    />
-                                </div>
-
-                                <div className='mb-4'>
-                                    <label htmlFor="profession" className='block text-sm font-medium text-gray-700'>Profession</label>
-
-                                    <input type="text" name="profession" id="profession"
-                                        value={formData.profession}
-                                        onChange={handleChange}
-                                        className='mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm'
-                                        required
-                                    />
-                                </div>
-
-                                <button type='submit' className={`mt-4 w-full bg-blue-500 text-white py-2 px-4 rounded-md`}>Update Profile</button>
-                            </form>
+            {/* Edit modal */}
+            {isModalOpen && (
+                <div className='fixed inset-0 z-50 flex items-center justify-center px-4'>
+                    <div className='absolute inset-0 bg-black/80 backdrop-blur-sm' onClick={() => setIsModalOpen(false)} />
+                    <div className='relative rounded-2xl border border-white/10 w-full max-w-md overflow-hidden'
+                        style={{ background: '#1a1a1a' }}>
+                        {/* Modal header */}
+                        <div className='flex items-center justify-between px-6 py-5 border-b border-white/5'>
+                            <h2 className='text-white font-bold text-lg' style={{ fontFamily: '"Playfair Display", serif' }}>Edit Profile</h2>
+                            <button onClick={() => setIsModalOpen(false)}
+                                className='w-8 h-8 rounded-lg flex items-center justify-center text-white/40 hover:text-white hover:bg-white/5 transition-all'>
+                                <i className='ri-close-line text-lg' />
+                            </button>
                         </div>
+
+                        <form onSubmit={handleSubmit} className='p-6 space-y-4'>
+                            {[
+                                { id: 'username', label: 'Username', type: 'text', placeholder: 'Your username' },
+                                { id: 'profileImage', label: 'Profile Image URL', type: 'text', placeholder: 'https://...' },
+                                { id: 'profession', label: 'Profession', type: 'text', placeholder: 'e.g. Fashion Designer' },
+                            ].map(({ id, label, type, placeholder }) => (
+                                <div key={id}>
+                                    <label htmlFor={id} className='block text-white/50 text-xs font-medium mb-1.5'>{label}</label>
+                                    <input id={id} type={type} name={id} value={formData[id]} onChange={handleChange}
+                                        placeholder={placeholder} className={inputCls} style={inputStyle} />
+                                </div>
+                            ))}
+
+                            <div>
+                                <label htmlFor='bio' className='block text-white/50 text-xs font-medium mb-1.5'>Bio</label>
+                                <textarea id='bio' name='bio' rows={3} value={formData.bio} onChange={handleChange}
+                                    placeholder='Tell us about yourself...'
+                                    className={`${inputCls} resize-none`} style={inputStyle} />
+                            </div>
+
+                            <div className='flex gap-3 pt-2'>
+                                <button type='button' onClick={() => setIsModalOpen(false)}
+                                    className='flex-1 py-3 rounded-xl border border-white/10 text-white/50 hover:text-white hover:border-white/25 text-sm font-medium transition-all duration-200'>
+                                    Cancel
+                                </button>
+                                <button type='submit' disabled={isLoading}
+                                    className='flex-1 py-3 rounded-xl bg-[#ed3849] hover:bg-[#d23141] disabled:opacity-50 text-white font-bold text-sm transition-all duration-200 flex items-center justify-center gap-2'>
+                                    {isLoading ? <><div className='w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin' /> Saving...</> : 'Save Changes'}
+                                </button>
+                            </div>
+                        </form>
                     </div>
-                )
-            }
+                </div>
+            )}
         </div>
     )
 }

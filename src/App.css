@@ -69,6 +69,8 @@ a {
 
 body {
   font-family: "Poppins", sans-serif;
+  background-color: #0d0d0d;
+  color: #ffffff;
 }
 
 nav {
@@ -134,14 +136,7 @@ nav {
 }
 
 .header__container {
-  min-height: 650px;
-  background-color: var(--primary-color-light);
-  border-bottom-left-radius: 1rem;
-  border-bottom-right-radius: 1rem;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 2rem;
-  align-items: center;
+  /* replaced by new Banner component */
 }
 
 .header__content {
