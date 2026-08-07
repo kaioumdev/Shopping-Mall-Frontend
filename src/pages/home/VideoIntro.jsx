@@ -76,7 +76,7 @@ const VideoIntro = ({ onComplete }) => {
                         className="text-[#ed3849] text-sm md:text-base tracking-[0.4em] uppercase font-medium"
                         style={{ animation: 'slideUp 0.8s ease 0.3s both' }}
                     >
-                        Shopping Mall — Est. 2024
+                        Shopping Mall — Est. 2026
                     </p>
                 </div>
 

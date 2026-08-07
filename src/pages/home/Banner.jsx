@@ -4,7 +4,7 @@ import bannerImg from '../../assets/header.png'
 
 const slides = [
     {
-        tag: "New Season 2024",
+        tag: "New Season 2026",
         heading: "Discover\nYour Style",
         sub: "Explore premium fashion across 100+ brands at Lebaba Shopping Mall.",
         cta: "Shop Now",

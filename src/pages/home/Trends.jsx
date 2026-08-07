@@ -7,7 +7,7 @@ import card3 from '../../assets/card-3.png'
 const trendItems = [
     {
         id: 1,
-        season: '2024 Trend',
+        season: '2026 Trend',
         title: "Women's Shirts",
         sub: 'Elegant & casual styles',
         image: card1,
@@ -16,7 +16,7 @@ const trendItems = [
     },
     {
         id: 2,
-        season: '2024 Trend',
+        season: '2026 Trend',
         title: "Women's Dresses",
         sub: 'From formal to festive',
         image: card2,
@@ -26,7 +26,7 @@ const trendItems = [
     },
     {
         id: 3,
-        season: '2024 Trend',
+        season: '2026 Trend',
         title: "Women's Casuals",
         sub: 'Comfort meets fashion',
         image: card3,
